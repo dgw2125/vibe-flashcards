@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chinese Flashcards</title>
+
+    <!-- Pico.css design system -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
+
+    <!-- Your own optional styles -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+<body>
+    <main class="container">
+      <h1>David's Flashcards for Learning Chinese</h1>
+      
+      <div id="pack-selector">
+        <label for="pack-select">Select a Flashcard Pack:</label>
+        <select id="pack-select">
+          <option value="metro">Shanghai Metro</option>
+          <option value="shopping">Shopping</option>
+          <option value="greetings">Greetings</option>
+        </select>
+        <button onclick="loadPack()">Load Pack</button>
+      </div>
+
+      <div id="stats" style="display:none;">
+        <p>Progress: <progress id="progress" value="0" max="100"></progress></p>
+        <p>Starred: <span id="star-count">0</span></p>
+      </div>
+
+      <div id="flashcard" style="display:none;">
+        <div class="card" onclick="flipCard()">
+          <div id="card-front">
+            <p id="chinese-text"></p>
+          </div>
+          <div id="card-back" style="display:none;">
+            <p id="english-text"></p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button onclick="previousCard()">← Previous</button>
+          <button onclick="toggleStar()">⭐ Star</button>
+          <button onclick="nextCard()">Next →</button>
+          <button onclick="shuffleCards()">🔀 Shuffle</button>
+        </div>
+      </div>
+
+      <div id="end-screen" style="display:none;">
+        <h2>Pack Complete!</h2>
+        <button onclick="reviewAgain()">Review Again</button>
+        <button onclick="reviewStarred()">Review Starred Cards</button>
+        <button onclick="backToSelector()">Back to Pack Selector</button>
+      </div>
+    </main>
+
+    <script src="cards.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

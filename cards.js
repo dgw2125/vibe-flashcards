@@ -1,0 +1,32 @@
+const flashcardPacks = {
+  metro: [
+    { chinese: "地铁站", pinyin: "dìtiě zhàn", english: "Metro Station" },
+    { chinese: "车票", pinyin: "chē piào", english: "Train Ticket" },
+    { chinese: "出口", pinyin: "chūkǒu", english: "Exit" },
+    { chinese: "入口", pinyin: "rùkǒu", english: "Entrance" },
+    { chinese: "月台", pinyin: "yuètái", english: "Platform" },
+    { chinese: "换乘", pinyin: "huàn chéng", english: "Transfer" },
+    { chinese: "下一站", pinyin: "xià yī zhàn", english: "Next Stop" },
+    { chinese: "洗手间", pinyin: "xǐ shǒu jiān", english: "Restroom" },
+  ],
+  shopping: [
+    { chinese: "多少钱", pinyin: "duō shao qián", english: "How much?" },
+    { chinese: "太贵了", pinyin: "tài guì le", english: "Too expensive" },
+    { chinese: "便宜一点", pinyin: "pián yi yì diǎn", english: "A bit cheaper" },
+    { chinese: "谢谢", pinyin: "xièxie", english: "Thank you" },
+    { chinese: "不要", pinyin: "búyào", english: "I don't want it" },
+    { chinese: "付款", pinyin: "fù kuǎn", english: "Pay" },
+    { chinese: "折扣", pinyin: "zhé kòu", english: "Discount" },
+    { chinese: "收据", pinyin: "shōu jù", english: "Receipt" },
+  ],
+  greetings: [
+    { chinese: "你好", pinyin: "nǐ hǎo", english: "Hello" },
+    { chinese: "早上好", pinyin: "zǎo shang hǎo", english: "Good morning" },
+    { chinese: "晚上好", pinyin: "wǎn shang hǎo", english: "Good evening" },
+    { chinese: "我叫...", pinyin: "wǒ jiào...", english: "My name is..." },
+    { chinese: "很高兴认识你", pinyin: "hěn gāo xìng rèn shi nǐ", english: "Nice to meet you" },
+    { chinese: "再见", pinyin: "zài jiàn", english: "Goodbye" },
+    { chinese: "对不起", pinyin: "duì bu qǐ", english: "Sorry" },
+    { chinese: "没关系", pinyin: "méi guān xi", english: "No problem" },
+  ],
+};
