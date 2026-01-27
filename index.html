@@ -15,9 +15,18 @@
   </head>
 
 <body>
+    <nav>
+      <div class="container">
+        <ul>
+          <li><strong>David's Chinese Flashcards</strong></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="backToSelector(); return false;" id="back-link" style="display:none;">← Back to Packs</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <main class="container">
-      <h1>David's Flashcards for Learning Chinese</h1>
-      
       <div id="pack-selector">
         <label for="pack-select">Select a Flashcard Pack:</label>
         <select id="pack-select">
@@ -28,26 +37,34 @@
         <button onclick="loadPack()">Load Pack</button>
       </div>
 
-      <div id="stats" style="display:none;">
-        <p>Progress: <progress id="progress" value="0" max="100"></progress></p>
-        <p>Starred: <span id="star-count">0</span></p>
-      </div>
-
-      <div id="flashcard" style="display:none;">
-        <div class="card" onclick="flipCard()">
-          <div id="card-front">
-            <p id="chinese-text"></p>
+      <div id="study-area" style="display:none;">
+        <div id="study-container">
+          <div id="flashcard-section">
+            <h2 id="pack-name"></h2>
+            <div class="card" onclick="flipCard()">
+              <div id="card-front">
+                <p id="chinese-text"></p>
+              </div>
+              <div id="card-back" style="display:none;">
+                <p id="english-text"></p>
+              </div>
+            </div>
           </div>
-          <div id="card-back" style="display:none;">
-            <p id="english-text"></p>
-          </div>
-        </div>
 
-        <div class="controls">
-          <button onclick="previousCard()">← Previous</button>
-          <button onclick="toggleStar()">⭐ Star</button>
-          <button onclick="nextCard()">Next →</button>
-          <button onclick="shuffleCards()">🔀 Shuffle</button>
+          <div id="sidebar">
+            <div id="stats">
+              <h3>Progress</h3>
+              <progress id="progress" value="0" max="100"></progress>
+              <p id="card-counter">Card 1 of 10</p>
+            </div>
+
+            <div id="controls">
+              <button onclick="previousCard()">← Previous</button>
+              <button onclick="toggleStar()">⭐ Star</button>
+              <button onclick="nextCard()">Next →</button>
+              <button onclick="shuffleCards()">🔀 Shuffle</button>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -18,10 +18,18 @@ function loadPack() {
   isFlipped = false;
   starredCards.clear();
 
+  // Set pack name
+  const packNames = {
+    'metro': 'Shanghai Metro',
+    'shopping': 'Shopping',
+    'greetings': 'Greetings'
+  };
+  document.getElementById('pack-name').textContent = packNames[packSelect];
+
   document.getElementById('pack-selector').style.display = 'none';
-  document.getElementById('flashcard').style.display = 'block';
-  document.getElementById('stats').style.display = 'block';
+  document.getElementById('study-area').style.display = 'block';
   document.getElementById('end-screen').style.display = 'none';
+  document.getElementById('back-link').style.display = 'block';
 
   displayCard();
 }
@@ -55,7 +63,6 @@ function displayCard() {
   chineseText.appendChild(pinyinDiv);
   
   document.getElementById('english-text').textContent = card.english;
-  document.getElementById('english-text').style.fontSize = '2.5em';
   document.getElementById('card-front').style.display = 'block';
   document.getElementById('card-back').style.display = 'none';
   isFlipped = false;
@@ -96,6 +103,7 @@ function toggleStar() {
 function updateProgress() {
   const progress = ((currentCardIndex + 1) / currentPack.length) * 100;
   document.getElementById('progress').value = progress;
+  document.getElementById('card-counter').textContent = `Card ${currentCardIndex + 1} of ${currentPack.length}`;
 }
 
 function updateStarCount() {
@@ -147,9 +155,9 @@ function reviewStarred() {
 
 function backToSelector() {
   document.getElementById('pack-selector').style.display = 'block';
-  document.getElementById('flashcard').style.display = 'none';
-  document.getElementById('stats').style.display = 'none';
+  document.getElementById('study-area').style.display = 'none';
   document.getElementById('end-screen').style.display = 'none';
   document.getElementById('pack-select').value = '';
+  document.getElementById('back-link').style.display = 'none';
 }
 
