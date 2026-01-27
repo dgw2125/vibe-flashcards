@@ -72,12 +72,29 @@
   cursor: pointer;
   padding: 40px;
   margin-bottom: 30px;
-  transition: transform 0.2s;
+  transition: transform 0.2s, border-color 0.2s;
+  position: relative;
 }
 
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Starred indicator - star icon */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5em;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.card.starred::after {
+  content: '⭐';
+  opacity: 1;
 }
 
 #card-front,
@@ -172,6 +189,41 @@ nav a:hover {
 
 #end-screen button {
   margin: 10px;
+}
+
+/* Keyboard Shortcuts styling */
+#keyboard-shortcuts {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+#keyboard-shortcuts p {
+  margin: 0 0 10px 0;
+  font-size: 0.9em;
+  color: #333;
+}
+
+#keyboard-shortcuts ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+  font-size: 0.85em;
+  color: #666;
+}
+
+#keyboard-shortcuts li {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+#keyboard-shortcuts code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+  color: #333;
 }
 
 /* Responsive design */

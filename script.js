@@ -42,6 +42,7 @@ function displayCard() {
 
   const card = currentPack[currentCardIndex];
   const chineseText = document.getElementById('chinese-text');
+  const cardElement = document.getElementById('current-card');
   
   // Clear previous content
   chineseText.innerHTML = '';
@@ -66,6 +67,17 @@ function displayCard() {
   document.getElementById('card-front').style.display = 'block';
   document.getElementById('card-back').style.display = 'none';
   isFlipped = false;
+
+  // Apply starred indicator and update button text
+  cardElement.classList.remove('starred');
+  const starButton = document.querySelector('#controls button:nth-child(2)');
+  
+  if (starredCards.has(currentCardIndex)) {
+    cardElement.classList.add('starred');
+    starButton.textContent = '✕ Remove Star';
+  } else {
+    starButton.textContent = '⭐ Star';
+  }
 
   updateProgress();
 }
@@ -92,10 +104,17 @@ function previousCard() {
 
 function toggleStar() {
   const cardIndex = currentCardIndex;
+  const cardElement = document.getElementById('current-card');
+  const starButton = document.querySelector('#controls button:nth-child(2)');
+  
   if (starredCards.has(cardIndex)) {
     starredCards.delete(cardIndex);
+    cardElement.classList.remove('starred');
+    starButton.textContent = '⭐ Star';
   } else {
     starredCards.add(cardIndex);
+    cardElement.classList.add('starred');
+    starButton.textContent = '✕ Remove Star';
   }
   updateStarCount();
 }
@@ -160,4 +179,34 @@ function backToSelector() {
   document.getElementById('pack-select').value = '';
   document.getElementById('back-link').style.display = 'none';
 }
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Only trigger if study area is visible (not in pack selector)
+  if (document.getElementById('study-area').style.display === 'none') {
+    return;
+  }
+
+  switch(e.code) {
+    case 'Space':
+      e.preventDefault();
+      flipCard();
+      break;
+    case 'ArrowRight':
+      nextCard();
+      break;
+    case 'ArrowLeft':
+      previousCard();
+      break;
+    case 'KeyS':
+      if (e.ctrlKey || e.metaKey) return; // Don't interfere with browser save
+      e.preventDefault();
+      toggleStar();
+      break;
+    case 'KeyR':
+      if (e.ctrlKey || e.metaKey) return; // Don't interfere with browser refresh
+      shuffleCards();
+      break;
+  }
+});
 

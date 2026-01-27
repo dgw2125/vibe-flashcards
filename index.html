@@ -41,7 +41,7 @@
         <div id="study-container">
           <div id="flashcard-section">
             <h2 id="pack-name"></h2>
-            <div class="card" onclick="flipCard()">
+            <div class="card" onclick="flipCard()" id="current-card">
               <div id="card-front">
                 <p id="chinese-text"></p>
               </div>
@@ -63,6 +63,16 @@
               <button onclick="toggleStar()">⭐ Star</button>
               <button onclick="nextCard()">Next →</button>
               <button onclick="shuffleCards()">🔀 Shuffle</button>
+            </div>
+
+            <div id="keyboard-shortcuts">
+              <p><strong>Keyboard Shortcuts:</strong></p>
+              <ul>
+                <li><code>Space</code> — Flip</li>
+                <li><code>←</code> / <code>→</code> — Navigate</li>
+                <li><code>S</code> — Star or Remove Star</li>
+                <li><code>R</code> — Shuffle</li>
+              </ul>
             </div>
           </div>
         </div>
