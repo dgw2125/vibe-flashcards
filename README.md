@@ -1,3 +1,5 @@
+LIVE DEMO: https://dgw2125.github.io/vibe-flashcards/
+
 Hi, I am trying to vibe code for the first time and this my first project.
 
 INSPIRATION / USER PROBLEM
