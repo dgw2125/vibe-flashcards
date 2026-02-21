@@ -195,7 +195,7 @@ function reviewHard() {
 
   document.getElementById('end-screen').style.display = 'none';
   document.getElementById('flashcard-section').style.display = 'block';
-  document.getElementById('sidebar').style.display = 'block';
+  document.getElementById('sidebar').style.display = 'flex';
 
   updateFilterButton();
   displayCard();
