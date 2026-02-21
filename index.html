@@ -49,6 +49,19 @@
                 <p id="english-text"></p>
               </div>
             </div>
+
+            <!-- Rating UI - shown only if card unrated -->
+            <div id="rating-ui" style="display:none;">
+              <p><strong>How difficult was this?</strong></p>
+              <div id="rating-buttons">
+                <button onclick="setCardRating('easy')" class="rating-btn easy">✓ Easy</button>
+                <button onclick="setCardRating('medium')" class="rating-btn medium">~ Medium</button>
+                <button onclick="setCardRating('hard')" class="rating-btn hard">✗ Hard</button>
+              </div>
+            </div>
+
+            <!-- Current rating display -->
+            <p id="current-rating" style="text-align: center; color: #666; margin-top: 10px;"></p>
           </div>
 
           <div id="sidebar">
@@ -63,6 +76,7 @@
               <button onclick="toggleStar()">⭐ Star</button>
               <button onclick="nextCard()">Next →</button>
               <button onclick="shuffleCards()">🔀 Shuffle</button>
+              <button onclick="reviewHard()" style="background: #ff9800; color: white;">✗ Hard Cards</button>
             </div>
 
             <div id="keyboard-shortcuts">
@@ -70,7 +84,7 @@
               <ul>
                 <li><code>Space</code> — Flip</li>
                 <li><code>←</code> / <code>→</code> — Navigate</li>
-                <li><code>S</code> — Star or Remove Star</li>
+                <li><code>S</code> — Star</li>
                 <li><code>R</code> — Shuffle</li>
               </ul>
             </div>
@@ -80,13 +94,16 @@
 
       <div id="end-screen" style="display:none;">
         <h2>Pack Complete!</h2>
+        <div id="end-screen-content"></div>
         <button onclick="reviewAgain()">Review Again</button>
         <button onclick="reviewStarred()">Review Starred Cards</button>
+        <button onclick="reviewHard()">Review Hard Cards</button>
         <button onclick="backToSelector()">Back to Pack Selector</button>
       </div>
     </main>
 
     <script src="cards.js"></script>
+    <script src="masteryStore.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

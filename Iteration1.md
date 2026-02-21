@@ -18,7 +18,7 @@ At the end of a deck, display the breakdown the levels of mastery across the dec
 
 If users had previously reviewed the cards, then display how the states of mastery changed from their last review to the most recent review. For example, the number of "hard" cards decreased from 5 to 3, the number of "medium" cards  decreased from 5 to 3, and the number of "easy" cards increased from 0 to 4. 
 
-Also show the of previously "unreviewed" to cards 
+Also show the of previously "unrated" to cards, only if applicable. 
 
 At the end of the deck or at tool bar on the right-hand side of the screen, there is also a feature to review just "hard" cards. 
 
