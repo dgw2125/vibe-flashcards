@@ -289,3 +289,32 @@ function backToSelector() {
   masteryStore = null;
 }
 
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('study-area').style.display === 'none') {
+    return;
+  }
+
+  switch(e.code) {
+    case 'Space':
+      e.preventDefault();
+      flipCard();
+      break;
+    case 'ArrowRight':
+      nextCard();
+      break;
+    case 'ArrowLeft':
+      previousCard();
+      break;
+    case 'KeyS':
+      if (e.ctrlKey || e.metaKey) return;
+      e.preventDefault();
+      toggleStar(e);
+      break;
+    case 'KeyR':
+      if (e.ctrlKey || e.metaKey) return;
+      shuffleCards();
+      break;
+  }
+});
+
