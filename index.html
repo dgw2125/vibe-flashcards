@@ -41,13 +41,32 @@
         <div id="study-container">
           <div id="flashcard-section">
             <h2 id="pack-name"></h2>
-            <div class="card" onclick="flipCard()" id="current-card">
-              <div id="card-front">
-                <p id="chinese-text"></p>
+            
+            <div id="flashcard-container">
+              <!-- Left arrow -->
+              <button class="nav-arrow left-arrow" onclick="previousCard()" title="Previous (← or Left Arrow)">
+                ‹
+              </button>
+
+              <!-- Flashcard -->
+              <div class="card" onclick="flipCard()" id="current-card">
+                <!-- Star button (top right) -->
+                <button class="star-button" onclick="toggleStar(event)" id="star-btn" title="Star this card (S)">
+                  ★
+                </button>
+
+                <div id="card-front">
+                  <p id="chinese-text"></p>
+                </div>
+                <div id="card-back" style="display:none;">
+                  <p id="english-text"></p>
+                </div>
               </div>
-              <div id="card-back" style="display:none;">
-                <p id="english-text"></p>
-              </div>
+
+              <!-- Right arrow -->
+              <button class="nav-arrow right-arrow" onclick="nextCard()" title="Next (→ or Right Arrow)">
+                ›
+              </button>
             </div>
 
             <!-- Rating UI - shown only if card unrated -->
@@ -71,12 +90,15 @@
               <p id="card-counter">Card 1 of 10</p>
             </div>
 
+            <!-- Star count display -->
+            <div id="star-count-display">
+              <p><strong>Starred Cards</strong></p>
+              <p id="star-count-number" style="font-size: 1.5em; color: #ffc107; text-align: center; margin: 10px 0;">0</p>
+            </div>
+
             <div id="controls">
-              <button onclick="previousCard()">← Previous</button>
-              <button onclick="toggleStar()">⭐ Star</button>
-              <button onclick="nextCard()">Next →</button>
               <button onclick="shuffleCards()">🔀 Shuffle</button>
-              <button onclick="reviewHard()" style="background: #ff9800; color: white;">✗ Hard Cards</button>
+              <button id="filter-button" onclick="reviewHard()">✗ Review Hard Cards</button>
             </div>
 
             <div id="keyboard-shortcuts">

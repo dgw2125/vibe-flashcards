@@ -41,6 +41,27 @@ class MasteryStore {
   }
 
   /**
+   * Batch initialize multiple cards
+   */
+  initializeCards(cardIds) {
+    let hasChanges = false;
+    cardIds.forEach(cardId => {
+      if (!this.data[cardId]) {
+        this.data[cardId] = {
+          starred: false,
+          rating: null,
+          reviewHistory: [],
+          lastReviewDate: null
+        };
+        hasChanges = true;
+      }
+    });
+    if (hasChanges) {
+      this.saveToStorage();
+    }
+  }
+
+  /**
    * Toggle star for a card
    */
   toggleStar(cardId) {
