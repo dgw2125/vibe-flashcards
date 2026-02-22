@@ -318,3 +318,26 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// Global flag for advanced mastery
+let advancedMasteryEnabled = localStorage.getItem('advancedMasteryEnabled') === 'true';
+
+function toggleAdvancedMastery() {
+  advancedMasteryEnabled = !advancedMasteryEnabled;
+  localStorage.setItem('advancedMasteryEnabled', advancedMasteryEnabled);
+  
+  const toggleBtn = document.getElementById('advanced-mastery-toggle');
+  toggleBtn.classList.toggle('active', advancedMasteryEnabled);
+  
+  // Update UI visibility
+  document.getElementById('filter-button').style.display = advancedMasteryEnabled ? 'block' : 'none';
+  document.getElementById('review-starred-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
+  document.getElementById('review-hard-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
+  document.getElementById('rating-ui-sidebar').style.display = advancedMasteryEnabled ? 'block' : 'none';
+}
+
+function initializeAdvancedMastery() {
+  const toggleBtn = document.getElementById('advanced-mastery-toggle');
+  toggleBtn.classList.toggle('active', advancedMasteryEnabled);
+  toggleAdvancedMastery();
+}
+
