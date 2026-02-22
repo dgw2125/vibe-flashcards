@@ -60,6 +60,8 @@
                 </div>
                 <div id="card-back" style="display:none;">
                   <p id="english-text"></p>
+                  <!-- Rating badge (back side only) -->
+                  <div class="rating-badge" id="rating-badge"></div>
                 </div>
               </div>
 
@@ -68,19 +70,6 @@
                 ›
               </button>
             </div>
-
-            <!-- Rating UI - shown only if card unrated -->
-            <div id="rating-ui" style="display:none;">
-              <p><strong>How difficult was this?</strong></p>
-              <div id="rating-buttons">
-                <button onclick="setCardRating('easy')" class="rating-btn easy">✓ Easy</button>
-                <button onclick="setCardRating('medium')" class="rating-btn medium">~ Medium</button>
-                <button onclick="setCardRating('hard')" class="rating-btn hard">✗ Hard</button>
-              </div>
-            </div>
-
-            <!-- Current rating display -->
-            <p id="current-rating" style="text-align: center; color: #666; margin-top: 10px;"></p>
           </div>
 
           <div id="sidebar">

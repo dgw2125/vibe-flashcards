@@ -92,12 +92,24 @@ function displayCard() {
 
   // Show rating UI if card is not yet rated
   const ratingUI = document.getElementById('rating-ui');
-  if (masteryState.rating === null) {
-    ratingUI.style.display = 'block';
-    document.getElementById('current-rating').textContent = '';
+  const currentRatingEl = document.getElementById('current-rating');
+  
+  if (masteryState && masteryState.rating) {
+    currentRatingEl.textContent = `Rated: ${masteryState.rating}`;
   } else {
-    ratingUI.style.display = 'none';
-    document.getElementById('current-rating').textContent = `Rated: ${masteryState.rating}`;
+    currentRatingEl.textContent = 'Unrated';
+  }
+  ratingUI.style.display = 'none';
+
+  // Update rating badge
+  const ratingBadge = document.getElementById('rating-badge');
+  ratingBadge.className = 'rating-badge';
+  if (masteryState && masteryState.rating) {
+    ratingBadge.textContent = `Rated: ${masteryState.rating}`;
+    ratingBadge.classList.add(masteryState.rating);
+  } else {
+    ratingBadge.textContent = 'Unrated';
+    ratingBadge.classList.add('unrated');
   }
 
   // Disable/enable arrow buttons
