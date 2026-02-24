@@ -80,7 +80,7 @@ function displayCard() {
   chineseText.appendChild(pinyinDiv);
   
   document.getElementById('english-text').textContent = card.english;
-  document.getElementById('card-front').style.display = 'block';
+  document.getElementById('card-front').style.display = 'flex';
   document.getElementById('card-back').style.display = 'none';
   isFlipped = false;
 
@@ -91,24 +91,28 @@ function displayCard() {
   }
 
   // Show rating UI if card is not yet rated
-  const ratingUI = document.getElementById('rating-ui');
+  const ratingUI = document.getElementById('rating-ui-sidebar');
   const currentRatingEl = document.getElementById('current-rating');
   
-  if (masteryState && masteryState.rating) {
-    currentRatingEl.textContent = `Rated: ${masteryState.rating}`;
-  } else {
-    currentRatingEl.textContent = 'Unrated';
+  if (currentRatingEl) {
+    if (masteryState && masteryState.rating) {
+      currentRatingEl.textContent = `Rated: ${masteryState.rating}`;
+    } else {
+      currentRatingEl.textContent = 'Unrated';
+    }
   }
-  ratingUI.style.display = 'none';
+  if (ratingUI) {
+    ratingUI.style.display = 'none';
+  }
 
   // Update rating badge
   const ratingBadge = document.getElementById('rating-badge');
   ratingBadge.className = 'rating-badge';
   if (masteryState && masteryState.rating) {
-    ratingBadge.textContent = `Rated: ${masteryState.rating}`;
+    ratingBadge.textContent = `rating: ${masteryState.rating}`;
     ratingBadge.classList.add(masteryState.rating);
   } else {
-    ratingBadge.textContent = 'Unrated';
+    ratingBadge.textContent = 'unrated';
     ratingBadge.classList.add('unrated');
   }
 
@@ -124,8 +128,8 @@ function displayCard() {
 
 function flipCard() {
   isFlipped = !isFlipped;
-  document.getElementById('card-front').style.display = isFlipped ? 'none' : 'block';
-  document.getElementById('card-back').style.display = isFlipped ? 'block' : 'none';
+  document.getElementById('card-front').style.display = isFlipped ? 'none' : 'flex';
+  document.getElementById('card-back').style.display = isFlipped ? 'flex' : 'none';
 }
 
 function nextCard() {
@@ -170,8 +174,10 @@ function setCardRating(rating) {
   const card = cardsToShow[currentCardIndex];
   masteryStore.setRating(card.id, rating);
   
-  const ratingUI = document.getElementById('rating-ui');
-  ratingUI.style.display = 'none';
+  const ratingUI = document.getElementById('rating-ui-sidebar');
+  if (ratingUI) {
+    ratingUI.style.display = 'none';
+  }
   
   const currentRating = document.getElementById('current-rating');
   currentRating.textContent = `Rated: ${rating}`;
@@ -352,4 +358,3 @@ function initializeAdvancedMastery() {
   toggleBtn.classList.toggle('active', advancedMasteryEnabled);
   toggleAdvancedMastery();
 }
-
