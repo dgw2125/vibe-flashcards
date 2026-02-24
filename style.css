@@ -170,6 +170,7 @@
 
 #card-back {
   position: relative;
+  padding-bottom: 82px;
 }
 
 #card-front p,
@@ -320,50 +321,57 @@ nav a:hover {
 }
 
 .rating-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border: 1px solid #d1d7de;
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.78em;
+  line-height: 1.2;
+  color: #5f6670;
+  background: #f2f4f7;
   transition: all 0.2s;
-  min-width: 100px;
+  min-width: 0;
 }
 
-.rating-btn.easy {
-  background: #4caf50;
-  color: white;
+.rating-btn:hover {
+  transform: translateY(-1px);
 }
 
 .rating-btn.easy:hover {
-  background: #45a049;
-  transform: translateY(-2px);
-}
-
-.rating-btn.medium {
-  background: #ff9800;
-  color: white;
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #2e7d32;
 }
 
 .rating-btn.medium:hover {
-  background: #e68900;
-  transform: translateY(-2px);
-}
-
-.rating-btn.hard {
-  background: #f44336;
-  color: white;
+  background: #fff3e0;
+  border-color: #ffcc80;
+  color: #ef6c00;
 }
 
 .rating-btn.hard:hover {
-  background: #da190b;
-  transform: translateY(-2px);
+  background: #ffebee;
+  border-color: #ef9a9a;
+  color: #c62828;
 }
 
-#current-rating {
-  text-align: center;
-  color: #666;
-  margin-top: 10px;
-  font-size: 0.95em;
+.rating-btn.easy.selected {
+  background: #4caf50;
+  border-color: #4caf50;
+  color: #fff;
+}
+
+.rating-btn.medium.selected {
+  background: #ff9800;
+  border-color: #ff9800;
+  color: #fff;
+}
+
+.rating-btn.hard.selected {
+  background: #f44336;
+  border-color: #f44336;
+  color: #fff;
 }
 
 /* Simplified controls */
@@ -456,11 +464,25 @@ nav a:hover {
 }
 
 /* Rating badge on card back */
-.rating-badge {
+#card-back-controls {
   position: absolute;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+#rating-buttons-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-badge {
   font-size: 0.85em;
   color: #666;
   font-weight: 400;

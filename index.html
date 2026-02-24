@@ -60,8 +60,14 @@
                 </div>
                 <div id="card-back" style="display:none;">
                   <p id="english-text"></p>
-                  <!-- Rating badge (back side only) -->
-                  <div class="rating-badge" id="rating-badge"></div>
+                  <div id="card-back-controls" onclick="event.stopPropagation()">
+                    <div id="rating-buttons-back">
+                      <button onclick="setCardRating('easy', event)" class="rating-btn easy" data-rating="easy">Easy</button>
+                      <button onclick="setCardRating('medium', event)" class="rating-btn medium" data-rating="medium">Medium</button>
+                      <button onclick="setCardRating('hard', event)" class="rating-btn hard" data-rating="hard">Hard</button>
+                    </div>
+                    <div class="rating-badge" id="rating-badge"></div>
+                  </div>
                 </div>
               </div>
 
@@ -97,17 +103,6 @@
             <div id="controls">
               <button onclick="shuffleCards()">🔀 Shuffle</button>
               <button id="filter-button" onclick="reviewHard()" style="display:none;">✗ Review Hard Cards</button>
-            </div>
-
-            <!-- Rating UI moved here, hidden by default -->
-            <div id="rating-ui-sidebar" style="display:none;">
-              <p><strong>How difficult was this?</strong></p>
-              <div id="rating-buttons-sidebar">
-                <button onclick="setCardRating('easy')" class="rating-btn easy">✓ Easy</button>
-                <button onclick="setCardRating('medium')" class="rating-btn medium">~ Medium</button>
-                <button onclick="setCardRating('hard')" class="rating-btn hard">✗ Hard</button>
-              </div>
-              <p id="current-rating" style="text-align: center; color: #666; margin-top: 10px;"></p>
             </div>
 
             <div id="keyboard-shortcuts">

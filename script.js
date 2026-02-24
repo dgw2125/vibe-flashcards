@@ -90,31 +90,8 @@ function displayCard() {
     cardElement.classList.add('starred');
   }
 
-  // Show rating UI if card is not yet rated
-  const ratingUI = document.getElementById('rating-ui-sidebar');
-  const currentRatingEl = document.getElementById('current-rating');
-  
-  if (currentRatingEl) {
-    if (masteryState && masteryState.rating) {
-      currentRatingEl.textContent = `Rated: ${masteryState.rating}`;
-    } else {
-      currentRatingEl.textContent = 'Unrated';
-    }
-  }
-  if (ratingUI) {
-    ratingUI.style.display = 'none';
-  }
-
-  // Update rating badge
-  const ratingBadge = document.getElementById('rating-badge');
-  ratingBadge.className = 'rating-badge';
-  if (masteryState && masteryState.rating) {
-    ratingBadge.textContent = `rating: ${masteryState.rating}`;
-    ratingBadge.classList.add(masteryState.rating);
-  } else {
-    ratingBadge.textContent = 'unrated';
-    ratingBadge.classList.add('unrated');
-  }
+  updateRatingDisplay(masteryState);
+  updateRatingBadgeVisibility();
 
   // Disable/enable arrow buttons
   const leftArrow = document.querySelector('.left-arrow');
@@ -130,6 +107,41 @@ function flipCard() {
   isFlipped = !isFlipped;
   document.getElementById('card-front').style.display = isFlipped ? 'none' : 'flex';
   document.getElementById('card-back').style.display = isFlipped ? 'flex' : 'none';
+  updateRatingBadgeVisibility();
+}
+
+function updateRatingBadgeVisibility() {
+  const ratingBadge = document.getElementById('rating-badge');
+  const ratingControls = document.getElementById('card-back-controls');
+  if (!ratingBadge || !ratingControls) return;
+
+  const shouldShow = advancedMasteryEnabled && isFlipped;
+  ratingBadge.style.display = shouldShow ? 'block' : 'none';
+  ratingControls.style.display = shouldShow ? 'flex' : 'none';
+}
+
+function updateRatingDisplay(masteryState) {
+  const ratingBadge = document.getElementById('rating-badge');
+  if (!ratingBadge) return;
+
+  ratingBadge.className = 'rating-badge';
+  if (masteryState && masteryState.rating) {
+    ratingBadge.textContent = `rating: ${masteryState.rating}`;
+    ratingBadge.classList.add(masteryState.rating);
+  } else {
+    ratingBadge.textContent = 'unrated';
+    ratingBadge.classList.add('unrated');
+  }
+
+  updateRatingButtonSelection(masteryState?.rating || null);
+}
+
+function updateRatingButtonSelection(currentRating) {
+  const ratingButtons = document.querySelectorAll('#rating-buttons-back .rating-btn');
+  ratingButtons.forEach((button) => {
+    const isSelected = button.dataset.rating === currentRating;
+    button.classList.toggle('selected', isSelected);
+  });
 }
 
 function nextCard() {
@@ -169,20 +181,15 @@ function updateStarCount() {
   document.getElementById('star-count-number').textContent = starredCount;
 }
 
-function setCardRating(rating) {
+function setCardRating(rating, event) {
+  if (event) {
+    event.stopPropagation();
+  }
   const cardsToShow = getCardsToShow();
   const card = cardsToShow[currentCardIndex];
   masteryStore.setRating(card.id, rating);
-  
-  const ratingUI = document.getElementById('rating-ui-sidebar');
-  if (ratingUI) {
-    ratingUI.style.display = 'none';
-  }
-  
-  const currentRating = document.getElementById('current-rating');
-  currentRating.textContent = `Rated: ${rating}`;
-  
-  displayCard();
+  updateRatingDisplay(masteryStore.getCard(card.id));
+  updateRatingBadgeVisibility();
 }
 
 function shuffleCards() {
@@ -342,19 +349,22 @@ let advancedMasteryEnabled = localStorage.getItem('advancedMasteryEnabled') === 
 function toggleAdvancedMastery() {
   advancedMasteryEnabled = !advancedMasteryEnabled;
   localStorage.setItem('advancedMasteryEnabled', advancedMasteryEnabled);
-  
+  applyAdvancedMasteryState();
+}
+
+function applyAdvancedMasteryState() {
   const toggleBtn = document.getElementById('advanced-mastery-toggle');
   toggleBtn.classList.toggle('active', advancedMasteryEnabled);
-  
+
   // Update UI visibility
   document.getElementById('filter-button').style.display = advancedMasteryEnabled ? 'block' : 'none';
   document.getElementById('review-starred-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
   document.getElementById('review-hard-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
-  document.getElementById('rating-ui-sidebar').style.display = advancedMasteryEnabled ? 'block' : 'none';
+  updateRatingBadgeVisibility();
 }
 
 function initializeAdvancedMastery() {
-  const toggleBtn = document.getElementById('advanced-mastery-toggle');
-  toggleBtn.classList.toggle('active', advancedMasteryEnabled);
-  toggleAdvancedMastery();
+  applyAdvancedMasteryState();
 }
+
+initializeAdvancedMastery();
