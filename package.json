@@ -1,0 +1,31 @@
+{
+  "name": "vibe-flashcards",
+  "version": "1.0.0",
+  "description": "Chinese flashcards app",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "node scripts/static-server.js",
+    "test": "npm run test:e2e",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:install": "playwright install",
+    "check": "npm run lint && npm run test:e2e"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "flashcards",
+    "javascript"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@playwright/test": "^1.52.0",
+    "eslint": "^9.22.0",
+    "globals": "^15.15.0"
+  },
+  "type": "commonjs"
+}

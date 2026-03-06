@@ -15,7 +15,45 @@ class MasteryStore {
    */
   loadFromStorage() {
     const stored = localStorage.getItem(this.storageKey);
-    return stored ? JSON.parse(stored) : {};
+    if (!stored) {
+      return {};
+    }
+
+    try {
+      const parsed = JSON.parse(stored);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+      console.warn(`Invalid mastery data for ${this.storageKey}; resetting store.`, error);
+      localStorage.removeItem(this.storageKey);
+      return {};
+    }
+  }
+
+  createDefaultCardState() {
+    return {
+      starred: false,
+      rating: null,
+      reviewHistory: [],
+      lastReviewDate: null
+    };
+  }
+
+  normalizeCardState(state) {
+    if (!state || typeof state !== 'object') {
+      return this.createDefaultCardState();
+    }
+
+    const rating = ['easy', 'medium', 'hard'].includes(state.rating) ? state.rating : null;
+    const reviewHistory = Array.isArray(state.reviewHistory)
+      ? state.reviewHistory.filter((entry) => entry && ['easy', 'medium', 'hard'].includes(entry.rating))
+      : [];
+
+    return {
+      starred: Boolean(state.starred),
+      rating,
+      reviewHistory,
+      lastReviewDate: typeof state.lastReviewDate === 'string' ? state.lastReviewDate : null
+    };
   }
 
   /**
@@ -30,12 +68,7 @@ class MasteryStore {
    */
   initializeCard(cardId) {
     if (!this.data[cardId]) {
-      this.data[cardId] = {
-        starred: false,
-        rating: null,
-        reviewHistory: [],
-        lastReviewDate: null
-      };
+      this.data[cardId] = this.createDefaultCardState();
       this.saveToStorage();
     }
   }
@@ -44,16 +77,26 @@ class MasteryStore {
    * Batch initialize multiple cards
    */
   initializeCards(cardIds) {
+    const validCardIds = new Set(cardIds);
     let hasChanges = false;
+
+    Object.keys(this.data).forEach((existingCardId) => {
+      if (!validCardIds.has(existingCardId)) {
+        delete this.data[existingCardId];
+        hasChanges = true;
+      }
+    });
+
     cardIds.forEach(cardId => {
       if (!this.data[cardId]) {
-        this.data[cardId] = {
-          starred: false,
-          rating: null,
-          reviewHistory: [],
-          lastReviewDate: null
-        };
+        this.data[cardId] = this.createDefaultCardState();
         hasChanges = true;
+      } else {
+        const normalizedState = this.normalizeCardState(this.data[cardId]);
+        if (JSON.stringify(normalizedState) !== JSON.stringify(this.data[cardId])) {
+          this.data[cardId] = normalizedState;
+          hasChanges = true;
+        }
       }
     });
     if (hasChanges) {

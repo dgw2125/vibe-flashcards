@@ -7,7 +7,7 @@
     <!-- Pico.css design system -->
     <link
       rel="stylesheet"
-      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+      href="https://unpkg.com/@picocss/pico@2/css/pico.min.css"
     />
 
     <!-- Your own optional styles -->
@@ -21,7 +21,7 @@
           <li><strong>David's Chinese Flashcards</strong></li>
         </ul>
         <ul>
-          <li><a href="#" onclick="backToSelector(); return false;" id="back-link" style="display:none;">← Back to Packs</a></li>
+          <li><a href="#" id="back-link" hidden>← Back to Packs</a></li>
         </ul>
       </div>
     </nav>
@@ -34,37 +34,37 @@
           <option value="shopping">Shopping</option>
           <option value="greetings">Greetings</option>
         </select>
-        <button onclick="loadPack()">Load Pack</button>
+        <button id="load-pack-btn">Load Pack</button>
       </div>
 
-      <div id="study-area" style="display:none;">
+      <div id="study-area" hidden>
         <div id="study-container">
           <div id="flashcard-section">
             <h2 id="pack-name"></h2>
             
             <div id="flashcard-container">
               <!-- Left arrow -->
-              <button class="nav-arrow left-arrow" onclick="previousCard()" title="Previous (← or Left Arrow)">
+              <button id="prev-card-btn" class="nav-arrow left-arrow" title="Previous (← or Left Arrow)">
                 ‹
               </button>
 
               <!-- Flashcard -->
-              <div class="card" onclick="flipCard()" id="current-card">
+              <div class="card" id="current-card">
                 <!-- Star button (top right) -->
-                <button class="star-button" onclick="toggleStar(event)" id="star-btn" title="Star this card (S)">
+                <button class="star-button" id="star-btn" title="Star this card (S)">
                   ★
                 </button>
 
                 <div id="card-front">
                   <p id="chinese-text"></p>
                 </div>
-                <div id="card-back" style="display:none;">
+                <div id="card-back" hidden>
                   <p id="english-text"></p>
-                  <div id="card-back-controls" onclick="event.stopPropagation()">
+                  <div id="card-back-controls">
                     <div id="rating-buttons-back">
-                      <button onclick="setCardRating('easy', event)" class="rating-btn easy" data-rating="easy">Easy</button>
-                      <button onclick="setCardRating('medium', event)" class="rating-btn medium" data-rating="medium">Medium</button>
-                      <button onclick="setCardRating('hard', event)" class="rating-btn hard" data-rating="hard">Hard</button>
+                      <button class="rating-btn easy" data-rating="easy">Easy</button>
+                      <button class="rating-btn medium" data-rating="medium">Medium</button>
+                      <button class="rating-btn hard" data-rating="hard">Hard</button>
                     </div>
                     <div class="rating-badge" id="rating-badge"></div>
                   </div>
@@ -72,7 +72,7 @@
               </div>
 
               <!-- Right arrow -->
-              <button class="nav-arrow right-arrow" onclick="nextCard()" title="Next (→ or Right Arrow)">
+              <button id="next-card-btn" class="nav-arrow right-arrow" title="Next (→ or Right Arrow)">
                 ›
               </button>
             </div>
@@ -80,9 +80,9 @@
 
           <div id="sidebar">
             <div id="mastery-toggle">
-              <div style="display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+              <div class="mastery-toggle-row">
                 <span>Advanced Features</span>
-                <button id="advanced-mastery-toggle" onclick="toggleAdvancedMastery()" class="toggle-switch" aria-label="Toggle advanced mastery features">
+                <button id="advanced-mastery-toggle" class="toggle-switch" aria-label="Toggle advanced mastery features">
                   <span class="toggle-slider"></span>
                 </button>
               </div>
@@ -97,12 +97,12 @@
             <!-- Star count display -->
             <div id="star-count-display">
               <p><strong>Starred Cards</strong></p>
-              <p id="star-count-number" style="font-size: 1.5em; color: #ffc107; text-align: center; margin: 10px 0;">0</p>
+              <p id="star-count-number">0</p>
             </div>
 
             <div id="controls">
-              <button onclick="shuffleCards()">🔀 Shuffle</button>
-              <button id="filter-button" onclick="reviewHard()" style="display:none;">✗ Review Hard Cards</button>
+              <button id="shuffle-btn">🔀 Shuffle</button>
+              <button id="filter-button" hidden>✗ Review Hard Cards</button>
             </div>
 
             <div id="keyboard-shortcuts">
@@ -118,13 +118,13 @@
         </div>
       </div>
 
-      <div id="end-screen" style="display:none;">
+      <div id="end-screen" hidden>
         <h2>Pack Complete!</h2>
         <div id="end-screen-content"></div>
-        <button onclick="reviewAgain()">Review Again</button>
-        <button id="review-starred-btn" onclick="reviewStarred()" style="display:none;">Review Starred Cards</button>
-        <button id="review-hard-btn" onclick="reviewHard()" style="display:none;">Review Hard Cards</button>
-        <button onclick="backToSelector()">Back to Pack Selector</button>
+        <button id="review-again-btn">Review Again</button>
+        <button id="review-starred-btn" hidden>Review Starred Cards</button>
+        <button id="review-hard-btn" hidden>Review Hard Cards</button>
+        <button id="back-selector-btn">Back to Pack Selector</button>
       </div>
     </main>
 

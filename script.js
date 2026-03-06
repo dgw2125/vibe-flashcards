@@ -2,18 +2,39 @@ let currentPack = [];
 let currentCardIndex = 0;
 let isFlipped = false;
 let masteryStore = null;
-let currentPackKey = '';
-let isFilteredView = false;
+let activeFilter = 'none';
+let filteredPack = null;
 
 // Helper function to get the cards to display
 function getCardsToShow() {
-  if (isFilteredView) {
-    const hardIds = masteryStore.getHardCardIds();
-    return JSON.parse(JSON.stringify(flashcardPacks[currentPackKey])).filter(card => 
-      hardIds.includes(card.id)
-    );
+  return filteredPack || currentPack;
+}
+
+function refreshActiveFilter() {
+  if (activeFilter === 'none') {
+    filteredPack = null;
+    return true;
   }
-  return currentPack;
+
+  const matchingIds = activeFilter === 'hard'
+    ? masteryStore.getHardCardIds()
+    : masteryStore.getStarredCardIds();
+
+  filteredPack = currentPack.filter((card) => matchingIds.includes(card.id));
+  if (filteredPack.length === 0) {
+    activeFilter = 'none';
+    filteredPack = null;
+    currentCardIndex = 0;
+    updateFilterButton();
+    return false;
+  }
+
+  if (currentCardIndex >= filteredPack.length) {
+    currentCardIndex = filteredPack.length - 1;
+  }
+
+  updateFilterButton();
+  return true;
 }
 
 function loadPack() {
@@ -24,11 +45,11 @@ function loadPack() {
     return;
   }
 
-  currentPackKey = packSelect;
   currentPack = JSON.parse(JSON.stringify(flashcardPacks[packSelect]));
   currentCardIndex = 0;
   isFlipped = false;
-  isFilteredView = false;
+  activeFilter = 'none';
+  filteredPack = null;
 
   masteryStore = new MasteryStore(packSelect);
   masteryStore.initializeCards(currentPack.map(card => card.id));
@@ -40,11 +61,12 @@ function loadPack() {
   };
   document.getElementById('pack-name').textContent = packNames[packSelect];
 
-  document.getElementById('pack-selector').style.display = 'none';
-  document.getElementById('study-area').style.display = 'block';
-  document.getElementById('end-screen').style.display = 'none';
-  document.getElementById('back-link').style.display = 'block';
+  document.getElementById('pack-selector').hidden = true;
+  document.getElementById('study-area').hidden = false;
+  document.getElementById('end-screen').hidden = true;
+  document.getElementById('back-link').hidden = false;
 
+  updateStarCount();
   updateFilterButton();
   displayCard();
 }
@@ -80,8 +102,8 @@ function displayCard() {
   chineseText.appendChild(pinyinDiv);
   
   document.getElementById('english-text').textContent = card.english;
-  document.getElementById('card-front').style.display = 'flex';
-  document.getElementById('card-back').style.display = 'none';
+  document.getElementById('card-front').hidden = false;
+  document.getElementById('card-back').hidden = true;
   isFlipped = false;
 
   // Apply starred indicator
@@ -105,8 +127,8 @@ function displayCard() {
 
 function flipCard() {
   isFlipped = !isFlipped;
-  document.getElementById('card-front').style.display = isFlipped ? 'none' : 'flex';
-  document.getElementById('card-back').style.display = isFlipped ? 'flex' : 'none';
+  document.getElementById('card-front').hidden = isFlipped;
+  document.getElementById('card-back').hidden = !isFlipped;
   updateRatingBadgeVisibility();
 }
 
@@ -116,8 +138,8 @@ function updateRatingBadgeVisibility() {
   if (!ratingBadge || !ratingControls) return;
 
   const shouldShow = advancedMasteryEnabled && isFlipped;
-  ratingBadge.style.display = shouldShow ? 'block' : 'none';
-  ratingControls.style.display = shouldShow ? 'flex' : 'none';
+  ratingBadge.hidden = !shouldShow;
+  ratingControls.hidden = !shouldShow;
 }
 
 function updateRatingDisplay(masteryState) {
@@ -160,7 +182,9 @@ function previousCard() {
 }
 
 function toggleStar(event) {
-  event.stopPropagation();
+  if (event) {
+    event.stopPropagation();
+  }
   
   const cardsToShow = getCardsToShow();
   const card = cardsToShow[currentCardIndex];
@@ -171,6 +195,15 @@ function toggleStar(event) {
     cardElement.classList.add('starred');
   } else {
     cardElement.classList.remove('starred');
+  }
+
+  if (activeFilter === 'starred') {
+    if (!refreshActiveFilter()) {
+      alert('No starred cards left. Returning to all cards.');
+    }
+    displayCard();
+    updateStarCount();
+    return;
   }
 
   updateStarCount();
@@ -188,6 +221,15 @@ function setCardRating(rating, event) {
   const cardsToShow = getCardsToShow();
   const card = cardsToShow[currentCardIndex];
   masteryStore.setRating(card.id, rating);
+
+  if (activeFilter === 'hard') {
+    if (!refreshActiveFilter()) {
+      alert('No hard cards left. Returning to all cards.');
+    }
+    displayCard();
+    return;
+  }
+
   updateRatingDisplay(masteryStore.getCard(card.id));
   updateRatingBadgeVisibility();
 }
@@ -203,24 +245,24 @@ function shuffleCards() {
 }
 
 function reviewHard() {
-  const hardIds = masteryStore.getHardCardIds();
-  
-  if (isFilteredView) {
-    isFilteredView = false;
+  if (activeFilter === 'hard') {
+    activeFilter = 'none';
+    filteredPack = null;
   } else {
-    if (hardIds.length === 0) {
+    activeFilter = 'hard';
+    if (!refreshActiveFilter()) {
       alert('No hard cards yet!');
+      activeFilter = 'none';
       return;
     }
-    isFilteredView = true;
   }
 
   currentCardIndex = 0;
   isFlipped = false;
 
-  document.getElementById('end-screen').style.display = 'none';
-  document.getElementById('flashcard-section').style.display = 'block';
-  document.getElementById('sidebar').style.display = 'flex';
+  document.getElementById('end-screen').hidden = true;
+  document.getElementById('flashcard-section').hidden = false;
+  document.getElementById('sidebar').hidden = false;
 
   updateFilterButton();
   displayCard();
@@ -228,7 +270,7 @@ function reviewHard() {
 
 function updateFilterButton() {
   const filterButton = document.getElementById('filter-button');
-  if (isFilteredView) {
+  if (activeFilter === 'hard') {
     filterButton.textContent = '↻ Review All Cards';
   } else {
     filterButton.textContent = '✗ Review Hard Cards';
@@ -269,54 +311,55 @@ function showEndScreen() {
   }
 
   document.getElementById('end-screen-content').innerHTML = progressionText;
-  document.getElementById('flashcard-section').style.display = 'none';
-  document.getElementById('sidebar').style.display = 'none';
-  document.getElementById('end-screen').style.display = 'block';
+  document.getElementById('flashcard-section').hidden = true;
+  document.getElementById('sidebar').hidden = true;
+  document.getElementById('end-screen').hidden = false;
 }
 
 function reviewAgain() {
   currentCardIndex = 0;
   isFlipped = false;
   
-  document.getElementById('end-screen').style.display = 'none';
-  document.getElementById('flashcard-section').style.display = 'block';
-  document.getElementById('sidebar').style.display = 'block';
+  document.getElementById('end-screen').hidden = true;
+  document.getElementById('flashcard-section').hidden = false;
+  document.getElementById('sidebar').hidden = false;
   
   displayCard();
 }
 
 function reviewStarred() {
-  const starredIds = masteryStore.getStarredCardIds();
-  if (starredIds.length === 0) {
+  activeFilter = 'starred';
+  if (!refreshActiveFilter()) {
+    activeFilter = 'none';
     alert('No starred cards yet!');
     return;
   }
 
-  currentPack = currentPack.filter(card => starredIds.includes(card.id));
   currentCardIndex = 0;
   isFlipped = false;
 
-  document.getElementById('end-screen').style.display = 'none';
-  document.getElementById('flashcard-section').style.display = 'block';
-  document.getElementById('sidebar').style.display = 'block';
+  document.getElementById('end-screen').hidden = true;
+  document.getElementById('flashcard-section').hidden = false;
+  document.getElementById('sidebar').hidden = false;
 
   displayCard();
 }
 
 function backToSelector() {
-  document.getElementById('pack-selector').style.display = 'block';
-  document.getElementById('study-area').style.display = 'none';
-  document.getElementById('end-screen').style.display = 'none';
+  document.getElementById('pack-selector').hidden = false;
+  document.getElementById('study-area').hidden = true;
+  document.getElementById('end-screen').hidden = true;
   document.getElementById('pack-select').value = '';
-  document.getElementById('back-link').style.display = 'none';
+  document.getElementById('back-link').hidden = true;
   
-  isFilteredView = false;
+  activeFilter = 'none';
+  filteredPack = null;
   masteryStore = null;
 }
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-  if (document.getElementById('study-area').style.display === 'none') {
+  if (document.getElementById('study-area').hidden) {
     return;
   }
 
@@ -357,9 +400,9 @@ function applyAdvancedMasteryState() {
   toggleBtn.classList.toggle('active', advancedMasteryEnabled);
 
   // Update UI visibility
-  document.getElementById('filter-button').style.display = advancedMasteryEnabled ? 'block' : 'none';
-  document.getElementById('review-starred-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
-  document.getElementById('review-hard-btn').style.display = advancedMasteryEnabled ? 'block' : 'none';
+  document.getElementById('filter-button').hidden = !advancedMasteryEnabled;
+  document.getElementById('review-starred-btn').hidden = !advancedMasteryEnabled;
+  document.getElementById('review-hard-btn').hidden = !advancedMasteryEnabled;
   updateRatingBadgeVisibility();
 }
 
@@ -367,4 +410,33 @@ function initializeAdvancedMastery() {
   applyAdvancedMasteryState();
 }
 
+function bindEventListeners() {
+  document.getElementById('back-link').addEventListener('click', (event) => {
+    event.preventDefault();
+    backToSelector();
+  });
+
+  document.getElementById('load-pack-btn').addEventListener('click', loadPack);
+  document.getElementById('prev-card-btn').addEventListener('click', previousCard);
+  document.getElementById('next-card-btn').addEventListener('click', nextCard);
+  document.getElementById('current-card').addEventListener('click', flipCard);
+  document.getElementById('star-btn').addEventListener('click', toggleStar);
+  document.getElementById('card-back-controls').addEventListener('click', (event) => event.stopPropagation());
+
+  document.querySelectorAll('#rating-buttons-back .rating-btn').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      setCardRating(button.dataset.rating, event);
+    });
+  });
+
+  document.getElementById('advanced-mastery-toggle').addEventListener('click', toggleAdvancedMastery);
+  document.getElementById('shuffle-btn').addEventListener('click', shuffleCards);
+  document.getElementById('filter-button').addEventListener('click', reviewHard);
+  document.getElementById('review-again-btn').addEventListener('click', reviewAgain);
+  document.getElementById('review-starred-btn').addEventListener('click', reviewStarred);
+  document.getElementById('review-hard-btn').addEventListener('click', reviewHard);
+  document.getElementById('back-selector-btn').addEventListener('click', backToSelector);
+}
+
+bindEventListeners();
 initializeAdvancedMastery();
