@@ -259,6 +259,27 @@ nav a:hover {
   opacity: 0.8;
 }
 
+/* Shared content panel for informational pages */
+.info-panel {
+  max-width: 820px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.info-panel h1 {
+  margin-top: 0;
+  color: #333;
+}
+
+.info-panel p {
+  line-height: 1.65;
+  color: #444;
+}
+
 /* End screen styling */
 #end-screen {
   text-align: center;
